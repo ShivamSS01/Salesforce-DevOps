@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Salesforce CLI
+        uses: forcedotcom/cli/action@v2
+
       - name: Authenticate to Dev Hub
         env:
           SFDX_CLIENT_ID: ${{ secrets.SFDX_CLIENT_ID }}
