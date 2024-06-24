@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v2-beta
@@ -23,6 +23,13 @@ jobs:
 
       - name: Install Salesforce CLI
         run: npm install @salesforce/cli --global
+
+      - name: Authenticate to Dev Hub
+        env:
+          SFDX_CLIENT_ID: ${{ secrets.SF_CICD_CLIENT_ID }}
+          SFDX_JWT_KEY_FILE: ${{ secrets.SF_CICD_SERVERKEY }}
+          SFDX_USERNAME: ${{ secrets.SF_CICD_USERNAME }}
+        run: sfdx auth:jwt:grant --clientid $SFDX_CLIENT_ID --jwtkeyfile $SF_CICD_SERVERKEY --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
 
       - name: Set API Version
         run: |
