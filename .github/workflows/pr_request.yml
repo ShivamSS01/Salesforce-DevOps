@@ -1,4 +1,4 @@
-name: PR Request
+name: PR Workflow
 
 on:
   pull_request:
@@ -25,10 +25,14 @@ jobs:
         run: npm test --passWithNoTests
 
       - name: Install Salesforce CLI
-        uses: salesforcecli/action-install@v2
+        uses: forcedotcom/cli/action@v2
 
       - name: Authenticate to Dev Hub
-        run: sfdx auth:jwt:grant --clientid ${{ secrets.SFDX_CLIENT_ID }} --jwtkeyfile ${{ secrets.SFDX_SERVERKEY }} --username ${{ secrets.SFDX_USERNAME }} --instanceurl https://login.salesforce.com
+        env:
+          SFDX_CLIENT_ID: ${{ secrets.SFDX_CLIENT_ID }}
+          SFDX_JWT_KEY_FILE: ${{ secrets.SFDX_SERVERKEY }}
+          SFDX_USERNAME: ${{ secrets.SFDX_USERNAME }}
+        run: sfdx auth:jwt:grant --clientid $SFDX_CLIENT_ID --jwtkeyfile $SFDX_SERVERKEY --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
 
       - name: Set API Version
         run: |
