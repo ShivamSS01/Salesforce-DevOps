@@ -1,4 +1,4 @@
-name: PR request
+name: PR Request
 
 on:
   pull_request:
@@ -22,4 +22,18 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npm test --passWithNoTests
+
+      - name: Install Salesforce CLI
+        uses: salesforcecli/action-install@v2
+
+      - name: Authenticate to Dev Hub
+        run: sfdx auth:jwt:grant --clientid ${{ secrets.SFDX_CLIENT_ID }} --jwtkeyfile ${{ secrets.SFDX_SERVERKEY }} --username ${{ secrets.SFDX_USERNAME }} --instanceurl https://login.salesforce.com
+
+      - name: Set API Version
+        run: |
+          sed -i 's/"sourceApiVersion": "[^"]*"/"sourceApiVersion": "60.0"/' sfdx-project.json
+          cat sfdx-project.json
+
+      - name: Validate code
+        run: sfdx force:source:validate -x manifest/package.xml
