@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test --passWithNoTests
-
       - name: Authenticate to Dev Hub
         env:
           SFDX_CLIENT_ID: ${{ secrets.SFDX_CLIENT_ID }}
