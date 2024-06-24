@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Install Salesforce CLI
-        uses: forcedotcom/cli/action@v2
+        run: npm install @salesforce/cli --global
 
       - name: Authenticate to Dev Hub
         env:
