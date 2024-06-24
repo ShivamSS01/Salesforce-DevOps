@@ -26,10 +26,10 @@ jobs:
 
       - name: Authenticate to Dev Hub
         env:
-          SFDX_CLIENT_ID: ${{ secrets.SFDX_CLIENT_ID }}
+          SFDX_CLIENT_ID: ${{ secrets.SFDX_CONSUMERKEY }}
           SFDX_JWT_KEY_FILE: ${{ secrets.SFDX_SERVERKEY }}
           SFDX_USERNAME: ${{ secrets.SFDX_USERNAME }}
-        run: sfdx auth:jwt:grant --clientid $SFDX_CLIENT_ID --jwtkeyfile $SFDX_SERVERKEY --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
+        run: sfdx auth:jwt:grant --clientid $SFDX_CONSUMERKEY --jwtkeyfile $SFDX_SERVERKEY --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
 
       - name: Set API Version
         run: |
