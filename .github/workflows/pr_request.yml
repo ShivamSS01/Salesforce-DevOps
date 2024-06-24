@@ -29,7 +29,7 @@ jobs:
           SFDX_CLIENT_ID: ${{ secrets.SF_CICD_CLIENT_ID }}
           SFDX_JWT_KEY_FILE: ${{ secrets.SF_CICD_SERVERKEY }}
           SFDX_USERNAME: ${{ secrets.SF_CICD_USERNAME }}
-        run: sfdx auth:jwt:grant --clientid $SFDX_CLIENT_ID --jwtkeyfile $SF_CICD_SERVERKEY --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
+        run: sfdx auth:jwt:grant --clientid $SF_CICD_CLIENT_ID --jwtkeyfile $SF_CICD_SERVERKEY --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
 
       - name: Set API Version
         run: |
