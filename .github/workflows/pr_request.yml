@@ -1,6 +1,6 @@
 name: Main PR
 on: 
-  push:
+  pull-request:
     branches:
       - main
    
