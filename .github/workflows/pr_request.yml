@@ -25,11 +25,7 @@ jobs:
         run: npm install @salesforce/cli --global
 
       - name: Authenticate to Dev Hub
-        env:
-          SFDX_CLIENT_ID: ${{ secrets.SF_CICD_CLIENT_ID }}
-          SFDX_JWT_KEY_FILE: ${{ secrets.SF_CICD_SERVERKEY }}
-          SFDX_USERNAME: ${{ secrets.SF_CICD_USERNAME }}
-        run: sfdx auth:jwt:grant --clientid $SFDX_CLIENT_ID --jwtkeyfile $SFDX_JWT_KEY_FILE --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
+        run: sfdx auth:jwt:grant --clientid ${{ secrets.SF_CICD_CLIENT_ID }} --jwtkeyfile ${{ secrets.SF_CICD_SERVERKEY }} --username ${{ secrets.SF_CICD_USERNAME }} --instanceurl https://login.salesforce.com
 
       - name: Set API Version
         run: |
@@ -37,4 +33,4 @@ jobs:
           cat sfdx-project.json
 
       - name: Validate code
-        run: sfdx force:source:deploy -x manifest/package.xml --checkonly --targetusername $SFDX_USERNAME
+        run: sfdx force:source:deploy -x manifest/package.xml --checkonly --targetusername ${{ secrets.SF_CICD_USERNAME }}
