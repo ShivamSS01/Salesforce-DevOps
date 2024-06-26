@@ -1,0 +1,49 @@
+name: PR Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test --passWithNoTests
+
+      - name: Install Salesforce CLI
+        run: npm install @salesforce/cli --global
+
+      - name: Create server key file
+        run: |
+          touch server.key
+          echo "${{ secrets.SF_CICD_SERVERKEY }}" > server.key
+          cat server.key  # Print the key to verify correct format (remove this line after verification)
+
+      - name: Authenticate to Dev Hub
+        env:
+          SFDX_CLIENT_ID: ${{ secrets.SF_CICD_CONSUMERKEY }}
+          SFDX_JWT_KEY_FILE: server.key
+          SFDX_USERNAME: ${{ secrets.SF_CICD_USERNAME }}
+        run: sfdx auth:jwt:grant --clientid $SFDX_CLIENT_ID --jwtkeyfile $SFDX_JWT_KEY_FILE --username $SFDX_USERNAME --instanceurl https://login.salesforce.com
+
+      - name: Set API Version
+        run: |
+          sed -i 's/"sourceApiVersion": "[^"]*"/"sourceApiVersion": "60.0"/' sfdx-project.json
+          cat sfdx-project.json
+
+      - name: Validate code
+        run: sfdx force:source:deploy -x manifest/package.xml --checkonly --targetusername $SFDX_USERNAME
